@@ -5,10 +5,9 @@ require_once '../src/Config/Database.php';
 header('Content-Type: application/json');
 
 try {
-    // Crée une instance de la classe Database
+    
     $database = new \Config\Database();
     
-    // Teste la connexion à la base de données
     $connection = $database->getConnection();
     
     // Test simple pour vérifier que l'API fonctionne
