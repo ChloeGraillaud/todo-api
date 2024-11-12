@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - ./public:/var/www/html
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html
+    networks:
+      - todo-network
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: API REST
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root_password
+    ports:
+      - "3306:3306"
+    networks:
+      - todo-network
+
+networks:
+  todo-network:
+    driver: bridge
