@@ -1,6 +1,6 @@
 <?php
-namespace Models;
-require_once '../src/Models/AbstractModel.php';
+namespace App\Models;
+// avant : namespace Models;
 
 class ListModel extends AbstractModel {
     protected string $table = "lists";
@@ -20,4 +20,22 @@ class ListModel extends AbstractModel {
         $query = "SELECT * FROM {$this->table} ORDER BY created_at DESC";
         return $this->db->query($query)->fetchAll();
     }
+    public function update(int $id, string $title, ?string $description = null): bool {
+        $query = "UPDATE {$this->table}
+        SET title = :title, description = :description
+        WHERE id = :id";
+        $stmt = $this->db->prepare($query);
+        return $stmt->execute([
+        'id' => $id,
+        'title' => $this->sanitize($title),
+        'description' => $description ? $this->sanitize($description) : null
+        ]);
+        }
+        // Compter les tâches d'une liste
+        public function countTasks(int $id): int {
+        $query = "SELECT COUNT(*) as total FROM tasks WHERE list_id = :id";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute(['id' => $id]);
+        return (int)$stmt->fetch()['total'];
+        }
 }
