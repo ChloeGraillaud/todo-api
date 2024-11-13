@@ -4,9 +4,9 @@ namespace Config;
 class Database {
     // Paramètres de connexion à la base de données
     private string $host = "localhost";
-    private string $dbname = "API REST";
+    private string $dbname = "todo_list_api";
     private string $username = "root";
-    private string $password = "root_password";
+    private string $password = "";
     private ?\PDO $connection = null;
 
     public function getConnection(): \PDO {
@@ -15,18 +15,17 @@ class Database {
             try {
                 // Tentative de connexion à la base
                 $this->connection = new \PDO(
-                    "mysql:host={$this->host};dbname={$this->dbname};charset=utf8",
+                    "mysql:host={$this->host};dbname={$this->dbname}",
                     $this->username,
-                    $this->password
+                    $this->password,
+                    [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]
                 );
-                // Définir le mode d'erreur sur exception
-                $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             } catch(\PDOException $e) {
                 // En cas d'erreur, on lance une exception
                 throw new \Exception("Connection error: " . $e->getMessage());
             }
         }
-        // Retourne la connexion
+         // Retourne la connexion
         return $this->connection;
     }
 }
